@@ -10,28 +10,15 @@ namespace Numero_Letra.Helpers
     {
         public static string NumeroALetras(this decimal numberAsString)
         {
-            string dec;
-
             var entero = Convert.ToInt64(Math.Truncate(numberAsString));
-            var decimales = Convert.ToInt32(Math.Round((numberAsString - entero) * 100, 2));
-            if (decimales > 0)
-            {
-                //dec = " PESOS CON " + decimales.ToString() + "/100";
-                dec = $" PESOS {decimales:0,0} /100";
-            }
-            //Código agregado por mí
-            else
-            {
-                //dec = " PESOS CON " + decimales.ToString() + "/100";
-                dec = $" PESOS {decimales:0,0} /100";
-            }
-            var res = NumeroALetras(Convert.ToDouble(entero)) + dec;
+            var res = NumeroALetras(Convert.ToInt64(entero));
             return res;
         }
         [SuppressMessage("ReSharper", "CompareOfFloatsByEqualityOperator")]
-        private static string NumeroALetras(double value)
+        private static string NumeroALetras(long value)
         {
-            string num2Text; value = Math.Truncate(value);
+            // Hubiera sido preferible un Switch :P
+            string num2Text;
             if (value == 0) num2Text = "CERO";
             else if (value == 1) num2Text = "UNO";
             else if (value == 2) num2Text = "DOS";
@@ -58,19 +45,19 @@ namespace Numero_Letra.Helpers
             else if (value == 70) num2Text = "SETENTA";
             else if (value == 80) num2Text = "OCHENTA";
             else if (value == 90) num2Text = "NOVENTA";
-            else if (value < 100) num2Text = NumeroALetras(Math.Truncate(value / 10) * 10) + " Y " + NumeroALetras(value % 10);
+            else if (value < 100) num2Text = NumeroALetras((value / 10) * 10) + " Y " + NumeroALetras(value % 10);
             else if (value == 100) num2Text = "CIEN";
             else if (value < 200) num2Text = "CIENTO " + NumeroALetras(value - 100);
-            else if ((value == 200) || (value == 300) || (value == 400) || (value == 600) || (value == 800)) num2Text = NumeroALetras(Math.Truncate(value / 100)) + "CIENTOS";
+            else if ((value == 200) || (value == 300) || (value == 400) || (value == 600) || (value == 800)) num2Text = NumeroALetras((value / 100)) + "CIENTOS";
             else if (value == 500) num2Text = "QUINIENTOS";
             else if (value == 700) num2Text = "SETECIENTOS";
             else if (value == 900) num2Text = "NOVECIENTOS";
-            else if (value < 1000) num2Text = NumeroALetras(Math.Truncate(value / 100) * 100) + " " + NumeroALetras(value % 100);
+            else if (value < 1000) num2Text = NumeroALetras((value / 100) * 100) + " " + NumeroALetras(value % 100);
             else if (value == 1000) num2Text = "MIL";
             else if (value < 2000) num2Text = "MIL " + NumeroALetras(value % 1000);
             else if (value < 1000000)
             {
-                num2Text = NumeroALetras(Math.Truncate(value / 1000)) + " MIL";
+                num2Text = NumeroALetras((value / 1000)) + " MIL";
                 if ((value % 1000) > 0)
                 {
                     num2Text = num2Text + " " + NumeroALetras(value % 1000);
@@ -86,20 +73,20 @@ namespace Numero_Letra.Helpers
             }
             else if (value < 1000000000000)
             {
-                num2Text = NumeroALetras(Math.Truncate(value / 1000000)) + " MILLONES ";
-                if ((value - Math.Truncate(value / 1000000) * 1000000) > 0)
+                num2Text = NumeroALetras((value / 1000000)) + " MILLONES ";
+                if ((value - (value / 1000000) * 1000000) > 0)
                 {
-                    num2Text = num2Text + " " + NumeroALetras(value - Math.Truncate(value / 1000000) * 1000000);
+                    num2Text = num2Text + " " + NumeroALetras(value - (value / 1000000) * 1000000);
                 }
             }
             else if (value == 1000000000000) num2Text = "UN BILLON";
-            else if (value < 2000000000000) num2Text = "UN BILLON " + NumeroALetras(value - Math.Truncate(value / 1000000000000) * 1000000000000);
+            else if (value < 2000000000000) num2Text = "UN BILLON " + NumeroALetras(value - (value / 1000000000000) * 1000000000000);
             else
             {
-                num2Text = NumeroALetras(Math.Truncate(value / 1000000000000)) + " BILLONES";
-                if ((value - Math.Truncate(value / 1000000000000) * 1000000000000) > 0)
+                num2Text = NumeroALetras((value / 1000000000000)) + " BILLONES";
+                if ((value - (value / 1000000000000) * 1000000000000) > 0)
                 {
-                    num2Text = num2Text + " " + NumeroALetras(value - Math.Truncate(value / 1000000000000) * 1000000000000);
+                    num2Text = num2Text + " " + NumeroALetras(value - (value / 1000000000000) * 1000000000000);
                 }
             }
             return num2Text;
